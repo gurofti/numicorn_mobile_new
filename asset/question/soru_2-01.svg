@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="katman_1" data-name="katman 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 350">
+  <polyline
+    points="70.6 181.28 80.58 175.84 96.29 199.29 113.83 129.23 227.48 129.23 227.48 132.8 116.62 132.8 98.05 206.92 94.38 206.92 76.83 180.73 71.79 183.47"
+    style="stroke-width: 0px;" />
+  <polyline
+    points="315.31 181.28 325.29 175.84 341 199.29 358.54 129.23 429.4 129.23 429.4 132.8 361.33 132.8 342.76 206.92 339.09 206.92 321.54 180.73 316.5 183.47"
+    style="stroke-width: 0px;" />
+  <text transform="translate(118.26 200.16)"
+    style="fill: #1d1d1b; font-family: TimesNewRomanPSMT; font-size: 72.06px;">
+    <tspan x="0" y="0">255</tspan>
+  </text>
+  <text transform="translate(355.09 200.16)"
+    style="fill: #1d1d1b; font-family: TimesNewRomanPSMT; font-size: 72.06px;">
+    <tspan x="0" y="0">16</tspan>
+  </text>
+  <text transform="translate(233.11 200.16)"
+    style="fill: #1d1d1b; font-family: TimesNewRomanPSMT; font-size: 72.06px;">
+    <tspan x="0" y="0" xml:space="preserve"> +</tspan>
+  </text>
+  <text transform="translate(291.66 200.16)"
+    style="fill: #1d1d1b; font-family: TimesNewRomanPSMT; font-size: 72.06px;">
+    <tspan x="0" y="0" xml:space="preserve">     </tspan>
+  </text>
+</svg>

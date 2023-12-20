@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="katman_1" data-name="katman 1" xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 358.81 96.72">
+  <line x1="6.24" y1="49.92" x2="28.47" y2="49.92" fill="none" stroke="#000" stroke-miterlimit="10"
+    stroke-width="1.85" />
+  <polyline
+    points="78.2 49.08 83.38 46.29 91.55 58.29 100.66 22.43 122.85 22.43 122.85 24.28 102.1 24.28 92.46 62.21 90.55 62.21 81.44 48.81 78.81 50.22"
+    stroke-width="0" />
+  <text transform="translate(8 35.69)" fill="#1d1d1b"
+    font-family="TimesNewRomanPSMT100" font-size="37.44">
+    <tspan x="0" y="0">1</tspan>
+  </text>
+  <text transform="translate(8.59 88.54)" fill="#1d1d1b"
+    font-family="TimesNewRomanPSMT100" font-size="37.44">
+    <tspan x="0" y="0">2</tspan>
+  </text>
+  <text transform="translate(102.97 59.29)" fill="#1d1d1b"
+    font-family="TimesNewRomanPSMT100" font-size="37.44"
+    letter-spacing="1.37em">
+    <tspan x="0" y="0">21</tspan>
+  </text>
+  <text transform="translate(220.85 59.29)" fill="#1d1d1b"
+    font-family="TimesNewRomanPSMT100" font-size="37.44"
+    letter-spacing="1.63em">
+    <tspan x="0" y="0">52</tspan>
+  </text>
+  <text transform="translate(320.3 42.52)" fill="#1d1d1b"
+    font-family="TimesNewRomanPSMT100" font-size="21.65"
+    letter-spacing=".56em">
+    <tspan x="0" y="0">21</tspan>
+  </text>
+  <text transform="translate(35.5 59.29)" fill="#1d1d1b"
+    font-family="TimesNewRomanPSMT100" font-size="37.44">
+    <tspan x="0" y="0" xml:space="preserve"> +</tspan>
+  </text>
+  <text transform="translate(65.92 59.29)" fill="#1d1d1b"
+    font-family="TimesNewRomanPSMT100" font-size="37.44"
+    letter-spacing="1.35em">
+    <tspan x="0" y="0" xml:space="preserve">  </tspan>
+  </text>
+  <text transform="translate(135.14 59.29)" fill="#1d1d1b"
+    font-family="TimesNewRomanPSMT100" font-size="37.44"
+    letter-spacing="-.02em">
+    <tspan x="0" y="0">- </tspan>
+  </text>
+  <text transform="translate(258.58 59.29)" fill="#1d1d1b"
+    font-family="TimesNewRomanPSMT100" font-size="37.44">
+    <tspan x="0" y="0" xml:space="preserve"> +</tspan>
+  </text>
+  <text transform="translate(289 59.29)" fill="#1d1d1b"
+    font-family="TimesNewRomanPSMT100" font-size="37.44">
+    <tspan x="0" y="0"> </tspan>
+  </text>
+  <polygon
+    points="203.87 48.84 195.19 48.84 195.19 50.6 203.87 50.6 203.87 59.28 205.63 59.28 205.63 50.6 214.31 50.6 214.31 48.84 205.63 48.84 205.63 40.16 203.87 40.16 203.87 48.84"
+    stroke-width="0" />
+  <path
+    d="m169.21,66.42c-.9-1.91-1.57-4.26-1.98-7.15-.45-2.89-.67-6.07-.67-9.65,0-3.14.22-6.12.71-9.01.49-2.94,1.2-5.29,2.17-7.2.94-1.86,2.17-3.33,3.67-4.46v-.98c-2.99,1.76-5.43,4.65-7.26,8.72-1.87,4.12-2.81,8.62-2.81,13.57s.9,9.16,2.66,13.18,4.23,7.05,7.41,9.11v-1.03c-1.68-1.52-2.99-3.23-3.89-5.09h0Zm76.42-32.33c.9,1.86,1.57,4.26,2.02,7.15.41,2.84.64,6.07.64,9.6,0,3.18-.22,6.17-.71,9.06-.45,2.89-1.16,5.29-2.13,7.15-.97,1.91-2.21,3.38-3.7,4.46v1.03c2.99-1.76,5.43-4.65,7.26-8.77,1.87-4.07,2.81-8.57,2.81-13.52s-.9-9.16-2.66-13.18-4.23-7.05-7.41-9.11v.98c1.68,1.52,2.99,3.23,3.89,5.14h0Z"
+    stroke-width="0" />
+  <polygon
+    points="337.51 36.47 332.48 36.47 332.48 37.49 337.51 37.49 337.51 42.51 338.53 42.51 338.53 37.49 343.55 37.49 343.55 36.47 338.53 36.47 338.53 31.44 337.51 31.44 337.51 36.47"
+    stroke-width="0" />
+</svg>

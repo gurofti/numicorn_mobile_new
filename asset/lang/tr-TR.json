@@ -1,0 +1,56 @@
+{
+    "form": {
+        "validation": {
+            "email": "Geçerli e-posta adresini giriniz.",
+            "notMatchPassword": "Şifreler eşleşmiyor.",
+            "required": "Bu alanı doldurmak zorunludur.",
+            "min": "En az {min} karakterden oluşmalıdır.",
+            "max": "En fazla {max} karakterden oluşmalıdır.",
+            "character_between": "Karakter aralığı {min} ile {max} arasında olmalıdır.",
+            "equal": "Bu alan {equal} karakterden oluşmalıdır."
+        }
+    },
+    "pages": {
+        "login": {
+            "header": "Giriş Yap",
+            "emailOrUserName": "E-Posta veya kullanıcı adınıız",
+            "password": "Şifreniz",
+            "forgotPassword": "Şifremi unuttum.",
+            "iWantToNewAccount": "Yeni bir hesap açmak istiyorum.",
+            "form_button": "Giriş Yap"
+        },
+        "register": {
+            "header": "Hesap Oluştur",
+            "name": "İsminiz",
+            "surname": "Soyisminiz",
+            "email": "E-posta adresiniz",
+            "userName": "Kullanıcı adınız",
+            "password": "Şifreniz",
+            "confidentialityAgreement": "Gelişmelerden haberdar olmak istiyorum.",
+            "iWantToLoginToCurrentAccount": "Mevcut hesabıma giriş yapmak istiyorum.",
+            "formButton": "Hesap Oluştur"
+        },
+        "forgot": {
+            "header": "Şifremi Unuttum",
+            "email": "E-posta adresiniz",
+            "formButton": "Bağlantı Gönder",
+            "rememberedMyPassword": "Şifremi hatırladım."
+        },
+        "forgot_refresh": {
+            "header": "Şifremi Sıfırla",
+            "newPassword": "Yeni Şifreniz",
+            "formButton": "Sıfırla",
+            "rememberedMyPassword": "Şifremi hatırladım."
+        }
+    },
+    "response": {
+        "global": {
+            "_404": "Sayfa bulunamadı.",
+            "_422": "Erişmek için yetkiniz yok.",
+            "_500": "Sunucularımızda problem oluştu."
+        },
+        "login": {
+            "_404": "Böyle bir kullanıcı bulunamadı."
+        }
+    }
+}
