@@ -9,7 +9,7 @@ part of 'trial_sections_model.dart';
 TrialSectionsModel _$TrialSectionsModelFromJson(Map<String, dynamic> json) =>
     TrialSectionsModel(
       data: (json['data'] as List<dynamic>?)
-          ?.map((e) => UnitModel.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => TrialUnitModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       message: json['message'] as String?,
     );
@@ -20,7 +20,8 @@ Map<String, dynamic> _$TrialSectionsModelToJson(TrialSectionsModel instance) =>
       'message': instance.message,
     };
 
-UnitModel _$UnitModelFromJson(Map<String, dynamic> json) => UnitModel(
+TrialUnitModel _$TrialUnitModelFromJson(Map<String, dynamic> json) =>
+    TrialUnitModel(
       id: json['id'] as int?,
       title: json['title'] as String?,
       description: json['description'] as String?,
@@ -31,7 +32,8 @@ UnitModel _$UnitModelFromJson(Map<String, dynamic> json) => UnitModel(
           .toList(),
     );
 
-Map<String, dynamic> _$UnitModelToJson(UnitModel instance) => <String, dynamic>{
+Map<String, dynamic> _$TrialUnitModelToJson(TrialUnitModel instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
       'description': instance.description,

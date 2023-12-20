@@ -81,6 +81,7 @@ Sections _$SectionsFromJson(Map<String, dynamic> json) => Sections(
           : QuestionModel.fromJson(json['question'] as Map<String, dynamic>),
       lastSecond: json['lastSecond'] as int?,
       again: json['again'] as bool?,
+      trial: json['trial'] as bool?,
     );
 
 Map<String, dynamic> _$SectionsToJson(Sections instance) => <String, dynamic>{
@@ -106,4 +107,5 @@ Map<String, dynamic> _$SectionsToJson(Sections instance) => <String, dynamic>{
       'question': instance.question,
       'lastSecond': instance.lastSecond,
       'again': instance.again,
+      'trial': instance.trial,
     };

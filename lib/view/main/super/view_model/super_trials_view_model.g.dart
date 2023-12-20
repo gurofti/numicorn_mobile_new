@@ -13,13 +13,13 @@ mixin _$SuperTrialsViewModel on _SuperTrialsViewModelBase, Store {
       Atom(name: '_SuperTrialsViewModelBase.unitModel', context: context);
 
   @override
-  ObservableList<UnitModel> get unitModel {
+  ObservableList<TrialUnitModel> get unitModel {
     _$unitModelAtom.reportRead();
     return super.unitModel;
   }
 
   @override
-  set unitModel(ObservableList<UnitModel> value) {
+  set unitModel(ObservableList<TrialUnitModel> value) {
     _$unitModelAtom.reportWrite(value, super.unitModel, () {
       super.unitModel = value;
     });

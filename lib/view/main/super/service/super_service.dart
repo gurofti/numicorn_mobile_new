@@ -59,6 +59,9 @@ class SuperService extends ISuperService with ServiceHelper {
     if (response.statusCode == 200) {
       return response.data.data;
     } else {
+      print("test");
+      showMessageContext(context, response);
+
       return null;
     }
   }

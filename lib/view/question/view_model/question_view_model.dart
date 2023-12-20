@@ -129,7 +129,10 @@ abstract class _QuestionViewModelBase extends BaseViewModel with Store {
   }
 
   @action
-  Future<void> fetchQuestion(int section_id, int unit_id) async {
+  Future<void> fetchQuestion(
+    int section_id,
+    int unit_id,
+  ) async {
     try {
       print("level: " + section.level.toString());
       final response = await questionService.question(QuestionRequestModel(

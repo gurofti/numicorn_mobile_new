@@ -43,7 +43,7 @@ abstract class _SuperTrialsViewModelBase extends BaseViewModel with Store {
   }
 
   @observable
-  ObservableList<UnitModel> unitModel = ObservableList<UnitModel>();
+  ObservableList<TrialUnitModel> unitModel = ObservableList<TrialUnitModel>();
 
   @observable
   int totalQuestionCount = 0;
@@ -89,8 +89,9 @@ abstract class _SuperTrialsViewModelBase extends BaseViewModel with Store {
     }
   }
 
-  ObservableList<UnitModel> convertToObservableList(List<UnitModel> list) {
-    return ObservableList<UnitModel>.of(list);
+  ObservableList<TrialUnitModel> convertToObservableList(
+      List<TrialUnitModel> list) {
+    return ObservableList<TrialUnitModel>.of(list);
   }
 
   @action

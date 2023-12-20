@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:numicorn_mobile/core/base/model/base_view_model.dart';
+import 'package:numicorn_mobile/core/constants/navigation/navigation_constants.dart';
+import 'package:numicorn_mobile/view/main/home/model/home_units_model.dart';
 import 'package:numicorn_mobile/view/main/super/model/trial_create_request_model.dart';
 import 'package:numicorn_mobile/view/main/super/model/trial_sections_model.dart';
 import 'package:numicorn_mobile/view/main/super/service/ISuperService.dart';
@@ -27,7 +29,7 @@ abstract class _SuperTrialCreateViewModelBase extends BaseViewModel with Store {
   void init() {}
 
   @observable
-  ObservableList<UnitModel> unitModel = ObservableList<UnitModel>();
+  ObservableList<TrialUnitModel> unitModel = ObservableList<TrialUnitModel>();
 
   @observable
   int totalQuestionCount = 0;
@@ -61,8 +63,9 @@ abstract class _SuperTrialCreateViewModelBase extends BaseViewModel with Store {
     }
   }
 
-  ObservableList<UnitModel> convertToObservableList(List<UnitModel> list) {
-    return ObservableList<UnitModel>.of(list);
+  ObservableList<TrialUnitModel> convertToObservableList(
+      List<TrialUnitModel> list) {
+    return ObservableList<TrialUnitModel>.of(list);
   }
 
   @action
@@ -76,7 +79,7 @@ abstract class _SuperTrialCreateViewModelBase extends BaseViewModel with Store {
   }
 
   @action
-  void trialCreate() {
+  Future<void> trialCreate() async {
     if (formState.currentState!.validate()) {
       if (!trialCreateLoading) {
         trialCreateLoading = true;
@@ -102,9 +105,15 @@ abstract class _SuperTrialCreateViewModelBase extends BaseViewModel with Store {
             }
           });
         });
-        model.sections = sections;
 
-        superService.createTrial(model);
+        model.sections = sections;
+        await superService.createTrial(model);
+        await navigation.navigateToPageClear(
+          path: NavigationConstants.QUESTION,
+          data: Sections(
+            trial: true,
+          ),
+        );
       }
     }
     trialCreateLoading = false;

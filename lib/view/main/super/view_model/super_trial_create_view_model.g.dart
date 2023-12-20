@@ -13,13 +13,13 @@ mixin _$SuperTrialCreateViewModel on _SuperTrialCreateViewModelBase, Store {
       Atom(name: '_SuperTrialCreateViewModelBase.unitModel', context: context);
 
   @override
-  ObservableList<UnitModel> get unitModel {
+  ObservableList<TrialUnitModel> get unitModel {
     _$unitModelAtom.reportRead();
     return super.unitModel;
   }
 
   @override
-  set unitModel(ObservableList<UnitModel> value) {
+  set unitModel(ObservableList<TrialUnitModel> value) {
     _$unitModelAtom.reportWrite(value, super.unitModel, () {
       super.unitModel = value;
     });
@@ -84,6 +84,15 @@ mixin _$SuperTrialCreateViewModel on _SuperTrialCreateViewModelBase, Store {
     return _$fetchTrialSectionAsyncAction.run(() => super.fetchTrialSection());
   }
 
+  late final _$trialCreateAsyncAction = AsyncAction(
+      '_SuperTrialCreateViewModelBase.trialCreate',
+      context: context);
+
+  @override
+  Future<void> trialCreate() {
+    return _$trialCreateAsyncAction.run(() => super.trialCreate());
+  }
+
   late final _$_SuperTrialCreateViewModelBaseActionController =
       ActionController(
           name: '_SuperTrialCreateViewModelBase', context: context);
@@ -96,17 +105,6 @@ mixin _$SuperTrialCreateViewModel on _SuperTrialCreateViewModelBase, Store {
             name: '_SuperTrialCreateViewModelBase.incrementOrDecrement');
     try {
       return super.incrementOrDecrement(unitIndex, sectionIndex, level, type);
-    } finally {
-      _$_SuperTrialCreateViewModelBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void trialCreate() {
-    final _$actionInfo = _$_SuperTrialCreateViewModelBaseActionController
-        .startAction(name: '_SuperTrialCreateViewModelBase.trialCreate');
-    try {
-      return super.trialCreate();
     } finally {
       _$_SuperTrialCreateViewModelBaseActionController.endAction(_$actionInfo);
     }

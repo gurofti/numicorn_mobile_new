@@ -18,7 +18,9 @@ mixin ServiceHelper {
       scaffoldMessageContextItem(context, response.data.message,
           snacbarType:
               snacbarType == null || snacbarType == true ? true : false);
-    } else if (response.statusCode == 404 || response.statusCode == 409) {
+    } else if (response.statusCode == 400 ||
+        response.statusCode == 404 ||
+        response.statusCode == 409) {
       // print("message: " + response.data!.message);
       scaffoldMessageContextItem(
         context,

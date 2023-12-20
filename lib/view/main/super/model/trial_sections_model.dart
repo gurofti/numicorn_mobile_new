@@ -4,7 +4,7 @@ part 'trial_sections_model.g.dart';
 
 @JsonSerializable()
 class TrialSectionsModel {
-  List<UnitModel>? data;
+  List<TrialUnitModel>? data;
   String? message;
 
   TrialSectionsModel({this.data, this.message});
@@ -19,7 +19,7 @@ class TrialSectionsModel {
 }
 
 @JsonSerializable()
-class UnitModel {
+class TrialUnitModel {
   int? id;
   String? title;
   String? description;
@@ -27,7 +27,7 @@ class UnitModel {
   int? langId;
   List<SectionsModel>? sections;
 
-  UnitModel({
+  TrialUnitModel({
     this.id,
     this.title,
     this.description,
@@ -37,11 +37,11 @@ class UnitModel {
   });
 
   @override
-  factory UnitModel.fromJson(Map<String, dynamic> json) {
-    return _$UnitModelFromJson(json);
+  factory TrialUnitModel.fromJson(Map<String, dynamic> json) {
+    return _$TrialUnitModelFromJson(json);
   }
   Map<String, dynamic> toJson() {
-    return _$UnitModelToJson(this);
+    return _$TrialUnitModelToJson(this);
   }
 }
 
