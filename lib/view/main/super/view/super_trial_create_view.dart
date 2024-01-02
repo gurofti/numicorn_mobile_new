@@ -495,44 +495,10 @@ class _CounterAppState extends State<CounterApp> {
         ),
       ],
     );
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Counter App'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Counter Value:',
-              style: TextStyle(fontSize: 20),
-            ),
-            Text(
-              '$counter',
-              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: incrementCounter,
-                  child: Text('Increment'),
-                ),
-                SizedBox(width: 20),
-                ElevatedButton(
-                  onPressed: decrementCounter,
-                  child: Text('Decrement'),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }
 
+// ignore: must_be_immutable
 class SuperHeader extends StatelessWidget {
   SuperHeader({
     Key? key,

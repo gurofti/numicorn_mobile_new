@@ -37,7 +37,7 @@ abstract class _SuperTrialsViewModelBase extends BaseViewModel with Store {
     if (!trialsLoading && page! <= data!.totalPages!) {
       if ((scrollController.position.pixels + 120) >=
           scrollController.position.maxScrollExtent) {
-        if (page! <= data!.totalPages!) {
+        if (page <= data!.totalPages!) {
           fetchTrials();
         }
       }
@@ -154,12 +154,6 @@ abstract class _SuperTrialsViewModelBase extends BaseViewModel with Store {
           data = response;
         } else if (page == 2) {}
         trialItems.addAll(response!.items!);
-
-        print("page: " +
-            page.toString() +
-            " loading: " +
-            trialsLoading.toString());
-        print("object: " + data!.items!.length.toString());
 
         // trialItems = trialItems;
         // if (response!.items!.length > 0) {
