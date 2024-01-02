@@ -23,7 +23,7 @@ abstract class _SuperTrialsViewModelBase extends BaseViewModel with Store {
 
   @override
   void setContext(BuildContext context) {
-    this.buildContext = context;
+    buildContext = context;
     superService = SuperService(context);
   }
 
