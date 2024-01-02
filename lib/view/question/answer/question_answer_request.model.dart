@@ -9,6 +9,7 @@ class QuestionAnswerRequestModel
   final int? section_id;
   final int? question_id;
   final int? lesson_id;
+  final int? super_question_id;
   final int? level;
   final dynamic answer;
   final bool? again;
@@ -18,6 +19,7 @@ class QuestionAnswerRequestModel
     this.question_id,
     this.level,
     this.lesson_id,
+    this.super_question_id,
     this.answer,
     this.again,
   });

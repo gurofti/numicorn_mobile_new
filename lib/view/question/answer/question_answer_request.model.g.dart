@@ -13,6 +13,7 @@ QuestionAnswerRequestModel _$QuestionAnswerRequestModelFromJson(
       question_id: json['question_id'] as int?,
       level: json['level'] as int?,
       lesson_id: json['lesson_id'] as int?,
+      super_question_id: json['super_question_id'] as int?,
       answer: json['answer'],
       again: json['again'] as bool?,
     );
@@ -23,6 +24,7 @@ Map<String, dynamic> _$QuestionAnswerRequestModelToJson(
       'section_id': instance.section_id,
       'question_id': instance.question_id,
       'lesson_id': instance.lesson_id,
+      'super_question_id': instance.super_question_id,
       'level': instance.level,
       'answer': instance.answer,
       'again': instance.again,

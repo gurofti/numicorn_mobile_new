@@ -25,6 +25,22 @@ mixin _$QuestionViewModel on _QuestionViewModelBase, Store {
     });
   }
 
+  late final _$trialFinishLoadingAtom =
+      Atom(name: '_QuestionViewModelBase.trialFinishLoading', context: context);
+
+  @override
+  bool get trialFinishLoading {
+    _$trialFinishLoadingAtom.reportRead();
+    return super.trialFinishLoading;
+  }
+
+  @override
+  set trialFinishLoading(bool value) {
+    _$trialFinishLoadingAtom.reportWrite(value, super.trialFinishLoading, () {
+      super.trialFinishLoading = value;
+    });
+  }
+
   late final _$errorLoadingAtom =
       Atom(name: '_QuestionViewModelBase.errorLoading', context: context);
 
@@ -313,6 +329,173 @@ mixin _$QuestionViewModel on _QuestionViewModelBase, Store {
     });
   }
 
+  late final _$selectedQuestionSortAtom = Atom(
+      name: '_QuestionViewModelBase.selectedQuestionSort', context: context);
+
+  @override
+  int get selectedQuestionSort {
+    _$selectedQuestionSortAtom.reportRead();
+    return super.selectedQuestionSort;
+  }
+
+  @override
+  set selectedQuestionSort(int value) {
+    _$selectedQuestionSortAtom.reportWrite(value, super.selectedQuestionSort,
+        () {
+      super.selectedQuestionSort = value;
+    });
+  }
+
+  late final _$trialQuestionCountAtom =
+      Atom(name: '_QuestionViewModelBase.trialQuestionCount', context: context);
+
+  @override
+  int get trialQuestionCount {
+    _$trialQuestionCountAtom.reportRead();
+    return super.trialQuestionCount;
+  }
+
+  @override
+  set trialQuestionCount(int value) {
+    _$trialQuestionCountAtom.reportWrite(value, super.trialQuestionCount, () {
+      super.trialQuestionCount = value;
+    });
+  }
+
+  late final _$trialQuestionTimeAtom =
+      Atom(name: '_QuestionViewModelBase.trialQuestionTime', context: context);
+
+  @override
+  int get trialQuestionTime {
+    _$trialQuestionTimeAtom.reportRead();
+    return super.trialQuestionTime;
+  }
+
+  @override
+  set trialQuestionTime(int value) {
+    _$trialQuestionTimeAtom.reportWrite(value, super.trialQuestionTime, () {
+      super.trialQuestionTime = value;
+    });
+  }
+
+  late final _$trialQuestionIdAtom =
+      Atom(name: '_QuestionViewModelBase.trialQuestionId', context: context);
+
+  @override
+  int? get trialQuestionId {
+    _$trialQuestionIdAtom.reportRead();
+    return super.trialQuestionId;
+  }
+
+  @override
+  set trialQuestionId(int? value) {
+    _$trialQuestionIdAtom.reportWrite(value, super.trialQuestionId, () {
+      super.trialQuestionId = value;
+    });
+  }
+
+  late final _$trialQuestionSituationsAtom = Atom(
+      name: '_QuestionViewModelBase.trialQuestionSituations', context: context);
+
+  @override
+  List<bool?> get trialQuestionSituations {
+    _$trialQuestionSituationsAtom.reportRead();
+    return super.trialQuestionSituations;
+  }
+
+  @override
+  set trialQuestionSituations(List<bool?> value) {
+    _$trialQuestionSituationsAtom
+        .reportWrite(value, super.trialQuestionSituations, () {
+      super.trialQuestionSituations = value;
+    });
+  }
+
+  late final _$solvedQuestionsAtom =
+      Atom(name: '_QuestionViewModelBase.solvedQuestions', context: context);
+
+  @override
+  ObservableList<int> get solvedQuestions {
+    _$solvedQuestionsAtom.reportRead();
+    return super.solvedQuestions;
+  }
+
+  @override
+  set solvedQuestions(ObservableList<int> value) {
+    _$solvedQuestionsAtom.reportWrite(value, super.solvedQuestions, () {
+      super.solvedQuestions = value;
+    });
+  }
+
+  late final _$passQuestionsAtom =
+      Atom(name: '_QuestionViewModelBase.passQuestions', context: context);
+
+  @override
+  ObservableList<int> get passQuestions {
+    _$passQuestionsAtom.reportRead();
+    return super.passQuestions;
+  }
+
+  @override
+  set passQuestions(ObservableList<int> value) {
+    _$passQuestionsAtom.reportWrite(value, super.passQuestions, () {
+      super.passQuestions = value;
+    });
+  }
+
+  late final _$trialQuestionAnswersAtom = Atom(
+      name: '_QuestionViewModelBase.trialQuestionAnswers', context: context);
+
+  @override
+  List<TrialQuestionAnswer> get trialQuestionAnswers {
+    _$trialQuestionAnswersAtom.reportRead();
+    return super.trialQuestionAnswers;
+  }
+
+  @override
+  set trialQuestionAnswers(List<TrialQuestionAnswer> value) {
+    _$trialQuestionAnswersAtom.reportWrite(value, super.trialQuestionAnswers,
+        () {
+      super.trialQuestionAnswers = value;
+    });
+  }
+
+  late final _$finishTrialAsyncAction =
+      AsyncAction('_QuestionViewModelBase.finishTrial', context: context);
+
+  @override
+  Future<void> finishTrial() {
+    return _$finishTrialAsyncAction.run(() => super.finishTrial());
+  }
+
+  late final _$fetchTrialQuestionSituationsAsyncAction = AsyncAction(
+      '_QuestionViewModelBase.fetchTrialQuestionSituations',
+      context: context);
+
+  @override
+  Future<void> fetchTrialQuestionSituations(int trial_id) {
+    return _$fetchTrialQuestionSituationsAsyncAction
+        .run(() => super.fetchTrialQuestionSituations(trial_id));
+  }
+
+  late final _$pageTrialsAsyncAction =
+      AsyncAction('_QuestionViewModelBase.pageTrials', context: context);
+
+  @override
+  Future<void> pageTrials() {
+    return _$pageTrialsAsyncAction.run(() => super.pageTrials());
+  }
+
+  late final _$fetchTrialQuestionsAsyncAction = AsyncAction(
+      '_QuestionViewModelBase.fetchTrialQuestions',
+      context: context);
+
+  @override
+  Future<void> fetchTrialQuestions(int trial_id, bool? trial_again) {
+    return _$fetchTrialQuestionsAsyncAction
+        .run(() => super.fetchTrialQuestions(trial_id, trial_again));
+  }
+
   late final _$fetchQuestionAsyncAction =
       AsyncAction('_QuestionViewModelBase.fetchQuestion', context: context);
 
@@ -328,6 +511,16 @@ mixin _$QuestionViewModel on _QuestionViewModelBase, Store {
   @override
   Future<void> answerPage() {
     return _$answerPageAsyncAction.run(() => super.answerPage());
+  }
+
+  late final _$changeQuestionSortAsyncAction = AsyncAction(
+      '_QuestionViewModelBase.changeQuestionSort',
+      context: context);
+
+  @override
+  Future<void> changeQuestionSort(dynamic sort) {
+    return _$changeQuestionSortAsyncAction
+        .run(() => super.changeQuestionSort(sort));
   }
 
   late final _$handleAnswerAsyncAction =
@@ -372,6 +565,28 @@ mixin _$QuestionViewModel on _QuestionViewModelBase, Store {
 
   late final _$_QuestionViewModelBaseActionController =
       ActionController(name: '_QuestionViewModelBase', context: context);
+
+  @override
+  void addSolvedQuestion(int number) {
+    final _$actionInfo = _$_QuestionViewModelBaseActionController.startAction(
+        name: '_QuestionViewModelBase.addSolvedQuestion');
+    try {
+      return super.addSolvedQuestion(number);
+    } finally {
+      _$_QuestionViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void addPassQuestion(int number) {
+    final _$actionInfo = _$_QuestionViewModelBaseActionController.startAction(
+        name: '_QuestionViewModelBase.addPassQuestion');
+    try {
+      return super.addPassQuestion(number);
+    } finally {
+      _$_QuestionViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   String findLastSecond() {
@@ -520,6 +735,7 @@ mixin _$QuestionViewModel on _QuestionViewModelBase, Store {
   String toString() {
     return '''
 loading: ${loading},
+trialFinishLoading: ${trialFinishLoading},
 errorLoading: ${errorLoading},
 answerPageStatus: ${answerPageStatus},
 whiteboardColor: ${whiteboardColor},
@@ -537,7 +753,15 @@ itemAnswers: ${itemAnswers},
 pairingQuestion: ${pairingQuestion},
 pairingAnswer: ${pairingAnswer},
 pairingIds: ${pairingIds},
-whiteBoard: ${whiteBoard}
+whiteBoard: ${whiteBoard},
+selectedQuestionSort: ${selectedQuestionSort},
+trialQuestionCount: ${trialQuestionCount},
+trialQuestionTime: ${trialQuestionTime},
+trialQuestionId: ${trialQuestionId},
+trialQuestionSituations: ${trialQuestionSituations},
+solvedQuestions: ${solvedQuestions},
+passQuestions: ${passQuestions},
+trialQuestionAnswers: ${trialQuestionAnswers}
     ''';
   }
 }

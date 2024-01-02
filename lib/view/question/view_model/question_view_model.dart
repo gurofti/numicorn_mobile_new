@@ -5,8 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:numicorn_mobile/core/base/model/base_view_model.dart';
 import 'package:numicorn_mobile/core/constants/navigation/navigation_constants.dart';
 import 'package:numicorn_mobile/core/init/network/network_core/service_error_model.dart';
+import 'package:numicorn_mobile/view/main/_product/model/base/request_id_model.dart';
 import 'package:numicorn_mobile/view/main/home/model/home_units_model.dart';
+import 'package:numicorn_mobile/view/main/super/model/trial_finish_request_model.dart';
+import 'package:numicorn_mobile/view/main/super/model/trial_finish_response_model.dart';
+import 'package:numicorn_mobile/view/main/super/model/trial_question_situations_request_model.dart';
+import 'package:numicorn_mobile/view/main/super/model/trial_questions_request_model.dart';
+import 'package:numicorn_mobile/view/main/super/service/ISuperService.dart';
+import 'package:numicorn_mobile/view/main/super/service/super_service.dart';
 import 'package:numicorn_mobile/view/question/answer/question_answer_request.model.dart';
+import 'package:numicorn_mobile/view/question/model/trial_question_answer.dart';
 import 'package:numicorn_mobile/view/question/question/question_request.model.dart';
 import 'package:numicorn_mobile/view/question/question/question_response_model.dart';
 import 'package:numicorn_mobile/view/question/report/question_report_error_request.model.dart';
@@ -22,7 +30,11 @@ class QuestionViewModel = _QuestionViewModelBase with _$QuestionViewModel;
 
 abstract class _QuestionViewModelBase extends BaseViewModel with Store {
   ScrollController scrollController = ScrollController();
+  ScrollController scrollTrialController = ScrollController();
+  dynamic whiteBoardController = WhiteBoardController();
+
   late IQuestionService questionService;
+  late ISuperService superService;
   GlobalKey<FormState> formState = GlobalKey<FormState>();
 
   TextEditingController reportExplainController = TextEditingController();
@@ -33,12 +45,14 @@ abstract class _QuestionViewModelBase extends BaseViewModel with Store {
   @override
   void init() {
     questionService = QuestionService(this.buildContext!);
+    superService = SuperService(this.buildContext!);
   }
-
-  WhiteBoardController whiteBoardController = WhiteBoardController();
 
   @observable
   bool loading = false;
+
+  @observable
+  bool trialFinishLoading = false;
 
   @observable
   bool errorLoading = false;
@@ -94,6 +108,58 @@ abstract class _QuestionViewModelBase extends BaseViewModel with Store {
   @observable // Type: 2
   bool whiteBoard = false;
 
+  @observable
+  int selectedQuestionSort = 1;
+
+  @observable
+  int trialQuestionCount = 0;
+
+  @observable
+  int trialQuestionTime = 0;
+
+  @observable
+  int? trialQuestionId = null;
+
+  @observable
+  List<bool?> trialQuestionSituations = List<bool>.of([]);
+
+  @observable
+  ObservableList<int> solvedQuestions = ObservableList<int>.of([]);
+
+  @observable
+  ObservableList<int> passQuestions = ObservableList<int>.of([]);
+
+  @observable
+  List<TrialQuestionAnswer> trialQuestionAnswers = [];
+
+  int findMissingQuestion(
+    int totalQuestions,
+    ObservableList<int> solvedQuestions,
+    ObservableList<int> passQuestions,
+  ) {
+    // Tüm soruların bulunduğu bir küme oluştur
+    Set<int> allQuestions =
+        Set<int>.from(List<int>.generate(totalQuestions, (index) => index + 1));
+
+    // Çözülen ve pas geçilen soruları kümeden çıkar
+    allQuestions.removeAll(solvedQuestions);
+    allQuestions.removeAll(passQuestions);
+
+    // Eğer hiç çözülmeyen soru yoksa -1 döndür
+    // Eğer birden fazla çözülmeyen soru varsa, sadece birini döndür
+    return allQuestions.isEmpty ? -1 : allQuestions.first;
+  }
+
+  @action
+  void addSolvedQuestion(int number) {
+    solvedQuestions.add(number);
+  }
+
+  @action
+  void addPassQuestion(int number) {
+    solvedQuestions.add(number);
+  }
+
   @action
   String findLastSecond() {
     int minutes = secondsElapsed ~/ 60;
@@ -129,20 +195,159 @@ abstract class _QuestionViewModelBase extends BaseViewModel with Store {
   }
 
   @action
+  Future<void> finishTrial() async {
+    print("step 0: " + trialFinishLoading.toString());
+
+    if (!trialFinishLoading) {
+      trialFinishLoading = true;
+      print("step 1");
+      final response = await superService.finishTrial(
+        TrialFinishRequestModel(
+          finish_time: secondsElapsed,
+          trial_id: section.trialId!,
+        ),
+      );
+
+      if (response != null) {
+        TrialFinishModel finishModel = response;
+        List<TransitionItem> actions = [];
+
+        actions.add(TransitionItem(
+          page: NavigationConstants.TRANSITION_CUP_PAGE,
+          params: {
+            "lastTime": findLastSecond(),
+            "cup": finishModel.cup,
+            "target": calculatePercentage(
+              finishModel.totalQuestion!,
+              finishModel.trueCount!,
+            ),
+          },
+        ));
+
+        actions.add(TransitionItem(
+          page: NavigationConstants.QUESTION,
+          params: Sections(
+            trialId: section.trialId,
+            trialResult: true,
+          ),
+        ));
+
+        print("actions: " + actions.length.toString());
+        TransitionModel transitions = TransitionModel(
+          index: 0,
+          actions: actions,
+          buttonText: "SONUÇLARINI GÖR",
+          finishPage: FinishPage(
+            page: NavigationConstants.QUESTION,
+            y: 0,
+          ),
+        );
+        print(transitions.toString());
+        await cupToPage(transitions);
+      }
+      trialFinishLoading = false;
+    }
+  }
+
+  @action
+  Future<void> fetchTrialQuestionSituations(int trial_id) async {
+    print("object1");
+    if (section.trialResult == true) {
+      print("object2");
+      final response = await superService.fetchTrialQuestionSituations(
+        TrialQuestionSituationsRequestModel(
+          trial_id: trial_id,
+        ),
+      );
+
+      if (response != null) {
+        print(response);
+        trialQuestionSituations = response;
+      }
+    }
+  }
+
+  @action
+  Future<void> pageTrials() async {
+    await navigation.navigateToPageClear(
+      path: NavigationConstants.SUPER_TRIALS,
+    );
+  }
+
+  @action
+  Future<void> fetchTrialQuestions(int trial_id, bool? trial_again) async {
+    if (trial_again == true) {
+      print("try again");
+      await superService.againTrial(RequestIdModel(id: trial_id));
+    }
+
+    final response = await superService.fetchTrialQuestions(
+      TrialQuestionsRequestModel(
+        page: selectedQuestionSort,
+        limit: 1,
+        trial_id: trial_id,
+      ),
+    );
+
+    if (response != null) {
+      removeAnswer();
+      print("response.items!: " + response.items!.question!.toString());
+      trialQuestionId = response.items!.id!;
+      questionModel = response.items!.question!;
+      trialQuestionCount = response.totalItems;
+      trialQuestionTime = response.items!.time!;
+
+      try {
+        TrialQuestionAnswer trialQuestionAnswer = trialQuestionAnswers
+            .firstWhere((element) => element.level == selectedQuestionSort);
+        if (trialQuestionAnswer != null) {
+          if (questionModel.type == 1) {
+            answerText = trialQuestionAnswer.answer;
+          } else if (questionModel.type == 2) {
+            answerTrueOrFalse = trialQuestionAnswer.answer;
+          } else if (questionModel.type == 3) {
+            // splitItemsToArrays(questionModel.items ?? []);
+          } else if (questionModel.type == 4) {
+            answers = questionModel.answers!;
+            answerOption = trialQuestionAnswer.answer;
+          }
+        }
+      } catch (e) {}
+
+      if (section.trialResult == true) {
+        if (questionModel.type == 1) {
+          answerText = questionModel.answer!.toString();
+        } else if (questionModel.type == 2) {
+          answerTrueOrFalse = questionModel.answer == 1 ? true : false;
+        } else if (questionModel.type == 4) {
+          answerOption = questionModel.answer!;
+        }
+      }
+      if (questionModel.type == 4) {
+        answers = questionModel.answers!;
+      }
+      loading = true;
+    }
+  }
+
+  @action
   Future<void> fetchQuestion(
     int section_id,
     int unit_id,
   ) async {
     try {
-      print("level: " + section.level.toString());
-      final response = await questionService.question(QuestionRequestModel(
-        section_id: section_id,
-        unit_id: unit_id,
-        level: section.level,
-        again: section.again,
-        againLevel:
-            questionModel.againLevel != null ? questionModel.againLevel : null,
-      ));
+      // print("level: " + section.level.toString());
+      final response = await questionService.question(
+        QuestionRequestModel(
+          section_id: section_id,
+          unit_id: unit_id,
+          level: section.level,
+          again: section.again,
+          againLevel: questionModel.againLevel != null
+              ? questionModel.againLevel
+              : null,
+        ),
+      );
       print("---- TEST 1 -----");
 
       if (response.statusCode == 200) {
@@ -237,6 +442,10 @@ abstract class _QuestionViewModelBase extends BaseViewModel with Store {
         TransitionModel transitions = TransitionModel(
           index: 0,
           actions: actions,
+          section: Sections(
+            trialId: section.trialId,
+            trialResult: true,
+          ),
           finishPage: FinishPage(
             page: NavigationConstants.HOME,
             y: section.y!,
@@ -368,17 +577,39 @@ abstract class _QuestionViewModelBase extends BaseViewModel with Store {
 
   @action
   dynamic findAnswer() {
+    print("trialQuestionAnswers: " + trialQuestionAnswers.length.toString());
     switch (questionModel.type) {
       case 1:
+        if (trialQuestionId != null) {
+          trialQuestionAnswers = TrialQuestionAnswer.updateOrAddAnswer(
+            trialQuestionAnswers,
+            selectedQuestionSort,
+            answerText,
+          );
+        }
         return answerText;
 
       case 2:
+        if (trialQuestionId != null) {
+          trialQuestionAnswers = TrialQuestionAnswer.updateOrAddAnswer(
+            trialQuestionAnswers,
+            selectedQuestionSort,
+            answerTrueOrFalse,
+          );
+        }
         return answerTrueOrFalse! ? 1 : 2;
 
       case 3:
         return true;
 
       case 4:
+        if (trialQuestionId != null) {
+          trialQuestionAnswers = TrialQuestionAnswer.updateOrAddAnswer(
+            trialQuestionAnswers,
+            selectedQuestionSort,
+            answerOption,
+          );
+        }
         return answerOption;
 
       default:
@@ -414,7 +645,31 @@ abstract class _QuestionViewModelBase extends BaseViewModel with Store {
   }
 
   @action
+  Future<void> changeQuestionSort(sort) async {
+    if (sort != selectedQuestionSort) {
+      if (!solvedQuestions.contains(selectedQuestionSort)) {
+        passQuestions.add(selectedQuestionSort);
+      }
+    }
+
+    selectedQuestionSort = sort;
+    await fetchTrialQuestions(section.trialId!, null);
+  }
+
+  @action
   Future<bool> handleAnswer() async {
+    if (section.trialResult == true) {
+      print("selectedQuestionSort: " + selectedQuestionSort.toString());
+      if (selectedQuestionSort < trialQuestionCount) {
+        selectedQuestionSort += 1;
+      } else {
+        selectedQuestionSort = 1;
+      }
+      await fetchTrialQuestions(section.trialId!, null);
+      return true;
+    }
+
+    print("trialQuestionId: " + trialQuestionId.toString());
     final response = await questionService.questionAnswer(
       QuestionAnswerRequestModel(
         section_id: section.id,
@@ -422,10 +677,20 @@ abstract class _QuestionViewModelBase extends BaseViewModel with Store {
         answer: findAnswer(),
         level: section.level,
         again: section.again,
+        super_question_id: trialQuestionId,
       ),
     );
 
-    print("response" + response.data.data.toString());
+    if (section.trialId != null) {
+      solvedQuestions.add(selectedQuestionSort);
+      int level = findMissingQuestion(
+          trialQuestionCount, solvedQuestions, passQuestions);
+      print("level: " + level.toString());
+      // passQuestions
+      selectedQuestionSort = level;
+      await fetchTrialQuestions(section.trialId!, null);
+      return true;
+    }
     if (response.statusCode == 200) {
       if (response.data.data) {
         await fetchQuestion(section.id as int, section.unitId!);
@@ -446,7 +711,6 @@ abstract class _QuestionViewModelBase extends BaseViewModel with Store {
       ),
     );
 
-    print("response" + response.data.data.toString());
     if (response.statusCode == 200) {
       if (response.data.data) {
         await fetchQuestion(section.id as int, section.unitId!);

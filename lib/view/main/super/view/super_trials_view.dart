@@ -4,7 +4,6 @@ import 'package:numicorn_mobile/core/base/view/base_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:numicorn_mobile/view/_product/_utilty/formatTimeAgo.dart';
 import 'package:numicorn_mobile/view/_product/_utilty/timer.dart';
-import 'package:numicorn_mobile/view/_product/_widgets/loading/loading_spink.dart';
 import 'package:numicorn_mobile/view/_product/_widgets/loading/loading_spink_app.dart';
 import 'package:numicorn_mobile/view/main/super/model/trials_response_model.dart';
 import 'package:numicorn_mobile/view/main/super/view/super_statistics_view.dart';
@@ -124,7 +123,7 @@ class SuperTrialsView extends StatelessWidget {
                                           if ((index + 1) ==
                                                   viewModel.trialItems.length &&
                                               viewModel.trialsLoading) {
-                                            return Center(
+                                            return const Center(
                                               child: LoadingSpinkPage(),
                                             );
                                           }
@@ -195,6 +194,9 @@ class SuperTrialsView extends StatelessWidget {
                   itemBuilder: (BuildContext bc) {
                     return [
                       PopupMenuItem(
+                        onTap: () async {
+                          await viewModel.trialAgain(itemModel.id!);
+                        },
                         child: Text(
                           "Yeniden Çöz",
                           style: TextStyle(
@@ -205,6 +207,9 @@ class SuperTrialsView extends StatelessWidget {
                         value: '/hello',
                       ),
                       PopupMenuItem(
+                        onTap: () async {
+                          await viewModel.trialResult(itemModel.id!);
+                        },
                         child: Text(
                           "Deneme Sonucu",
                           style: TextStyle(
@@ -215,6 +220,9 @@ class SuperTrialsView extends StatelessWidget {
                         value: '/about',
                       ),
                       PopupMenuItem(
+                        onTap: () async {
+                          await viewModel.trialDelete(itemModel.id!);
+                        },
                         child: Text(
                           "Sil",
                           style: TextStyle(
@@ -418,7 +426,7 @@ class SuperTrialsView extends StatelessWidget {
               ),
             ),
             style: ElevatedButton.styleFrom(
-              primary: context.appColor,
+              backgroundColor: context.appColor,
               padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
             ),
             onPressed: () {

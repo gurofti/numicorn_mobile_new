@@ -11,6 +11,7 @@ extension ColorExtension on BuildContext {
   Color get appColorYellow => const Color(0xffffda53);
   Color get appColorYellow100 => const Color(0xffffcc02);
   Color get appColorYellow200 => const Color(0xffEAC155);
+  Color get appColorYellow300 => Color.fromARGB(255, 255, 200, 60);
   Color get appColor100 => const Color(0xff060553);
   Color get appColor200 => const Color(0xff0A0883);
   Color get appColor300 => const Color(0xff6562F6);

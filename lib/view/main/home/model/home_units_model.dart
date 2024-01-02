@@ -119,7 +119,9 @@ class Sections {
   QuestionModel? question;
   int? lastSecond;
   bool? again;
-  bool? trial;
+  int? trialId;
+  bool? trialResult;
+  bool? trialAgain;
 
   Sections({
     this.path,
@@ -144,7 +146,9 @@ class Sections {
     this.question,
     this.lastSecond,
     this.again,
-    this.trial,
+    this.trialId,
+    this.trialResult,
+    this.trialAgain,
   });
 
   Sections.fromJson(Map<String, dynamic> json) {

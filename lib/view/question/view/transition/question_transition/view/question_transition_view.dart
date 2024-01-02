@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:lottie/lottie.dart';
-import 'package:numicorn_mobile/core/extension/string_extension.dart';
-import 'package:numicorn_mobile/core/init/navigation/navigation_service.dart';
 import 'package:numicorn_mobile/view/question/view/transition/question_transition/view_model/question_transition_view_model.dart';
 import 'package:numicorn_mobile/view/question/view/transition/transition_model.dart';
 import '../../../../../../core/extension/color_extension.dart';
@@ -90,7 +87,7 @@ class QuestionTransitionView extends StatelessWidget {
                             child: SizedBox(
                               width: context.width - 56,
                               child: Text(
-                                'DEVAM ET',
+                                transitionModel!.buttonText ?? "DEVAM ET",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: context.appColor,

@@ -111,13 +111,13 @@ mixin _$SuperTrialsViewModel on _SuperTrialsViewModelBase, Store {
       Atom(name: '_SuperTrialsViewModelBase.trialItems', context: context);
 
   @override
-  List<TrialItemModel> get trialItems {
+  ObservableList<TrialItemModel> get trialItems {
     _$trialItemsAtom.reportRead();
     return super.trialItems;
   }
 
   @override
-  set trialItems(List<TrialItemModel> value) {
+  set trialItems(ObservableList<TrialItemModel> value) {
     _$trialItemsAtom.reportWrite(value, super.trialItems, () {
       super.trialItems = value;
     });
@@ -137,6 +137,30 @@ mixin _$SuperTrialsViewModel on _SuperTrialsViewModelBase, Store {
     _$pageAtom.reportWrite(value, super.page, () {
       super.page = value;
     });
+  }
+
+  late final _$trialResultAsyncAction =
+      AsyncAction('_SuperTrialsViewModelBase.trialResult', context: context);
+
+  @override
+  Future<void> trialResult(int trial_id) {
+    return _$trialResultAsyncAction.run(() => super.trialResult(trial_id));
+  }
+
+  late final _$trialDeleteAsyncAction =
+      AsyncAction('_SuperTrialsViewModelBase.trialDelete', context: context);
+
+  @override
+  Future<void> trialDelete(int id) {
+    return _$trialDeleteAsyncAction.run(() => super.trialDelete(id));
+  }
+
+  late final _$trialAgainAsyncAction =
+      AsyncAction('_SuperTrialsViewModelBase.trialAgain', context: context);
+
+  @override
+  Future<void> trialAgain(int trial_id) {
+    return _$trialAgainAsyncAction.run(() => super.trialAgain(trial_id));
   }
 
   late final _$fetchTrialSectionAsyncAction = AsyncAction(

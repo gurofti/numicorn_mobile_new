@@ -107,13 +107,16 @@ abstract class _SuperTrialCreateViewModelBase extends BaseViewModel with Store {
         });
 
         model.sections = sections;
-        await superService.createTrial(model);
-        await navigation.navigateToPageClear(
-          path: NavigationConstants.QUESTION,
-          data: Sections(
-            trial: true,
-          ),
-        );
+        var response = await superService.createTrial(model);
+        if (response != null) {
+          print("# trial id: " + response['id'].toString());
+          await navigation.navigateToPage(
+            path: NavigationConstants.QUESTION,
+            data: Sections(
+              trialId: response['id'],
+            ),
+          );
+        }
       }
     }
     trialCreateLoading = false;

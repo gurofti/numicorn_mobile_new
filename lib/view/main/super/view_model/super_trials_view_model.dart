@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:numicorn_mobile/core/base/model/base_view_model.dart';
 import 'package:numicorn_mobile/core/constants/navigation/navigation_constants.dart';
+import 'package:numicorn_mobile/view/main/_product/model/base/request_id_model.dart';
+import 'package:numicorn_mobile/view/main/home/model/home_units_model.dart';
 import 'package:numicorn_mobile/view/main/super/model/trial_sections_model.dart';
 import 'package:numicorn_mobile/view/main/super/model/trials_request_model.dart';
 import 'package:numicorn_mobile/view/main/super/model/trials_response_model.dart';
@@ -61,10 +63,45 @@ abstract class _SuperTrialsViewModelBase extends BaseViewModel with Store {
   bool trialsLoading = false;
 
   @observable
-  List<TrialItemModel> trialItems = [];
+  ObservableList<TrialItemModel> trialItems = ObservableList<TrialItemModel>();
 
   @observable
   int page = 1;
+
+  @action
+  Future<void> trialResult(int trial_id) async {
+    await navigation.navigateToPage(
+      path: NavigationConstants.QUESTION,
+      data: Sections(
+        trialId: trial_id,
+        trialResult: true,
+      ),
+    );
+  }
+
+  @action
+  Future<void> trialDelete(int id) async {
+    trialItems.removeWhere((item) => item.id == id);
+    trialItems = trialItems;
+
+    await superService.deleteTrial(RequestIdModel(id: id));
+  }
+
+  void removeItemWithId(List<TrialItemModel> trialItems, int id) {
+    trialItems.removeWhere((item) => item.id == id);
+  }
+
+  @action
+  Future<void> trialAgain(int trial_id) async {
+    await navigation.navigateToPage(
+      path: NavigationConstants.QUESTION,
+      data: Sections(
+        trialId: trial_id,
+        trialResult: false,
+        trialAgain: true,
+      ),
+    );
+  }
 
   @action
   incrementOrDecrement(int unitIndex, int sectionIndex, int level, int type) {

@@ -12,8 +12,6 @@ class CupPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("transitions.actions[transitions.index].params['target']" +
-        transitions.actions[transitions.index].params['target'].toString());
     return QuestionTransitionView(
       transitionModel: transitions,
       content: Column(

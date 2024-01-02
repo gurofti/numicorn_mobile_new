@@ -27,37 +27,165 @@ class QuestionButton extends StatelessWidget {
     return Observer(builder: (_) {
       return Padding(
         padding: const EdgeInsets.all(8.0),
-        child: FancyButton(
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                vertical: 8,
-                horizontal: 20,
-              ),
-              width: context.width,
-              child: Text(
-                'DEVAM ET',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 17,
-                  fontFamily: context.fontFamily600,
+        child: SizedBox(
+          width: context.width,
+          child: Row(
+            children: [
+              if (viewModel.trialQuestionId != null)
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.only(right: context.width * 0.02),
+                    child: FancyButton(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 8,
+                          horizontal: 20,
+                        ),
+                        width: context.width * 0.3,
+                        child: Text(
+                          viewModel.section.trialResult == null
+                              ? 'BİTİR'
+                              : 'KAPAT',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 17,
+                            fontFamily: context.fontFamily600,
+                          ),
+                        ),
+                      ),
+                      size: 18,
+                      radius: 30.0,
+                      color: Colors.red,
+                      onPressed: () async {
+                        if (viewModel.section.trialResult == true) {
+                          return await viewModel.pageTrials();
+                        }
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text(
+                                "Denemeyi Sonlandır!",
+                                style: TextStyle(
+                                  fontFamily: context.fontFamily500,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              backgroundColor: Colors.white,
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    child: Text(
+                                      "Sınavı sonlandırmak istediğinize emin misiniz?",
+                                      style: TextStyle(fontSize: 18),
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.only(top: 38.0),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: FancyButton(
+                                            child: SizedBox(
+                                              child: Center(
+                                                child: Text(
+                                                  "İPTAL",
+                                                  style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 17,
+                                                    fontFamily: 'PoppinsBold',
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            size: 50,
+                                            color: Colors.red,
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                          ),
+                                        ),
+                                        SizedBox(width: 8),
+                                        Expanded(
+                                          child: FancyButton(
+                                            child: SizedBox(
+                                              child: Center(
+                                                child: Text(
+                                                  "BİTİR",
+                                                  style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 17,
+                                                    fontFamily: 'PoppinsBold',
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            size: 50,
+                                            color: context.appColor,
+                                            onPressed: () async {
+                                              print("finish trial");
+                                              await viewModel.finishTrial();
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              Expanded(
+                flex: 2,
+                child: FancyButton(
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 8,
+                      horizontal: 20,
+                    ),
+                    child: Text(
+                      'DEVAM ET',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 17,
+                        fontFamily: context.fontFamily600,
+                      ),
+                    ),
+                  ),
+                  size: 18,
+                  radius: 30.0,
+                  color: !viewModel.findAnswerStatus()
+                      ? Colors.grey
+                      : context.appColor,
+                  onPressed: () async {
+                    if (viewModel.trialQuestionId == null) {
+                      if (viewModel.questionModel!.heart == null ||
+                          viewModel.questionModel!.heart! <= 0) {
+                        return rightToLifeShowModal(context);
+                      }
+                      if (viewModel.findAnswerStatus()) {
+                        if (!await viewModel.handleAnswer()) {
+                          wrongShowModal(context);
+                        }
+                      }
+                    } else {
+                      await viewModel.handleAnswer();
+                    }
+                  },
                 ),
               ),
-            ),
-            size: 18,
-            radius: 30.0,
-            color:
-                !viewModel.findAnswerStatus() ? Colors.grey : context.appColor,
-            onPressed: () async {
-              if (viewModel.questionModel.heart! <= 0) {
-                return rightToLifeShowModal(context);
-              }
-              if (viewModel.findAnswerStatus()) {
-                if (!await viewModel.handleAnswer()) {
-                  wrongShowModal(context);
-                }
-              }
-            }),
+            ],
+          ),
+        ),
       );
     });
   }
@@ -423,20 +551,24 @@ class QuestionButton extends StatelessWidget {
                           ),
                         ),
                         child: FancyButton(
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 8,
-                            ),
-                            width: context.width * 0.85,
-                            child: Text(
-                              'Devam Et'.toUpperCase(),
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.red,
-                                fontSize: 17,
-                                fontFamily: 'PoppinsBold',
+                          child: Column(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 8,
+                                ),
+                                width: context.width * 0.85,
+                                child: Text(
+                                  'Devam Et'.toUpperCase(),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 17,
+                                    fontFamily: 'PoppinsBold',
+                                  ),
+                                ),
                               ),
-                            ),
+                            ],
                           ),
                           size: 18,
                           radius: 30.0,

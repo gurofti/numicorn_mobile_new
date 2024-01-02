@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class LinearPercentIndicator extends StatefulWidget {
   final double lineHeight;
-  final EdgeInsetsGeometry padding;
+  final EdgeInsets padding;
   final bool animation;
   final int animationDuration;
   final Radius barRadius;

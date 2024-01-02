@@ -10,6 +10,7 @@ class QuestionRequestModel extends INetworkModel<QuestionRequestModel> {
   final int? level;
   final bool? again;
   final int? againLevel;
+  final int? super_question_id;
 
   QuestionRequestModel({
     this.section_id,
@@ -17,6 +18,7 @@ class QuestionRequestModel extends INetworkModel<QuestionRequestModel> {
     this.level,
     this.again,
     this.againLevel,
+    this.super_question_id,
   });
 
   @override

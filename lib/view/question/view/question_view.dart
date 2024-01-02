@@ -2,9 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_tex/flutter_tex.dart';
 import 'package:numicorn_mobile/core/base/view/base_widget.dart';
 import 'package:numicorn_mobile/view/_product/_widgets/board/whiteBoard.dart';
 import 'package:numicorn_mobile/view/_product/_widgets/progress/linear_percent_indicator.dart';
+import 'package:numicorn_mobile/view/_product/_widgets/timer/count_down_timer.dart';
 import 'package:numicorn_mobile/view/_product/_widgets/transition/transition_page.dart';
 import 'package:numicorn_mobile/view/_product/_widgets/willPopScope/will_pop_scope.dart';
 import 'package:numicorn_mobile/view/main/home/model/home_units_model.dart';
@@ -43,7 +45,16 @@ class QuestionView extends StatelessWidget {
         model.setContext(context);
         model.init();
         model.section = section;
-        model.fetchQuestion(this.section.id as int, this.section.unitId as int);
+        if (section.trialId != null) {
+          print("# trialId: " + section.trialId.toString());
+          model.fetchTrialQuestionSituations(section.trialId as int);
+          model.fetchTrialQuestions(section.trialId as int, section.trialAgain);
+        } else {
+          model.fetchQuestion(
+            this.section.id as int,
+            this.section.unitId as int,
+          );
+        }
         print("last second: " + section.level.toString());
         model.timerStart(second: section.lastSecond ?? 0);
       },
@@ -52,6 +63,8 @@ class QuestionView extends StatelessWidget {
         print("question id: " + viewModel.questionModel.id.toString());
         print("user heart: " + viewModel.questionModel.heart.toString());
         print(viewModel.questionModel.is_image.toString());
+
+        // ignore: dead_code
         return viewModel.loading
             ? Stack(
                 children: [
@@ -78,11 +91,53 @@ class QuestionView extends StatelessWidget {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                buildStatusContainer(context, viewModel),
+                                buildStatusContainer(
+                                    context, viewModel, section),
                                 // Question Image
                                 if (viewModel.questionModel.type == 1 ||
                                     viewModel.questionModel.type == 2 ||
                                     viewModel.questionModel.type == 4)
+                                  // Center(
+                                  //   child: Column(
+                                  //     children: [
+                                  //       // TeXView(
+                                  //       //   renderingEngine: TeXViewRenderingEngine.katex(),
+                                  //       //   child: TeXViewColumn(children: [
+                                  //       //     TeXViewDocument(
+                                  //       //         r"Ahmet'in yaşı şu anda Ali'nin yaşının iki katıdır."),
+                                  //       //     TeXViewDocument(
+                                  //       //         r"Eğer 5 yıl sonra Ahmet'in yaşı Ali'nin yaşının 1.5 katı olacaksa,"),
+                                  //       //     TeXViewDocument(
+                                  //       //         r"Ahmet'in şu anki yaşı kaçtır?")
+                                  //       //   ]),
+                                  //       // ),
+                                  //       // TeXView(
+                                  //       //   renderingEngine:
+                                  //       //       TeXViewRenderingEngine.katex(),
+                                  //       //   child: TeXViewDocument(
+                                  //       //     r"""
+                                  //       //   Ahmet'in yaşı şu anda Ali'nin yaşının iki katıdır. \\
+                                  //       //    Eğer 5 yıl sonra Ahmet'in yaşı Ali'nin yaşının 1.5 katı olacaksa, \\
+                                  //       //    Ahmet'in şu anki yaşı kaçtır?
+
+                                  //       //     """,
+                                  //       //     style: TeXViewStyle(
+                                  //       //       textAlign:
+                                  //       //           TeXViewTextAlign.center,
+                                  //       //       sizeUnit: TeXViewSizeUnit.pixels,
+                                  //       //       fontStyle: TeXViewFontStyle(
+                                  //       //         fontSize: 15,
+                                  //       //       ),
+                                  //       //     ),
+                                  //       //   ),
+                                  //       // ),
+                                  //       // SizedBox(height: 50),
+                                  //       latexExample(context),
+                                  //       // latexExample(context),
+                                  //     ],
+                                  //   ),
+                                  // ),
+
                                   buildQuestionContainer(
                                       viewModel.questionModel, context),
                                 Column(
@@ -101,8 +156,10 @@ class QuestionView extends StatelessWidget {
                                           mainAxisAlignment:
                                               MainAxisAlignment.end,
                                           children: [
-                                            if (viewModel
-                                                .questionModel.answer_status!)
+                                            if (viewModel.questionModel
+                                                        .answer_detail !=
+                                                    null &&
+                                                section.trialId == null)
                                               GestureDetector(
                                                 onTap: () async {
                                                   await viewModel.answerPage();
@@ -125,6 +182,25 @@ class QuestionView extends StatelessWidget {
                                                   ),
                                                 ),
                                               ),
+                                            // Padding(
+                                            //   padding:
+                                            //       const EdgeInsets.symmetric(
+                                            //     vertical: 12.0,
+                                            //   ),
+                                            //   child: GestureDetector(
+                                            //     onTap: () {
+                                            //       viewModel.whiteBoard =
+                                            //           !viewModel.whiteBoard;
+                                            //     },
+                                            //     child: Icon(
+                                            //       Icons.task_alt,
+                                            //       size: 28,
+                                            //       color: viewModel.whiteBoard
+                                            //           ? context.appColorPink500
+                                            //           : context.appColor,
+                                            //     ),
+                                            //   ),
+                                            // ),
                                             GestureDetector(
                                               onTap: () {
                                                 viewModel.whiteBoard =
@@ -192,8 +268,6 @@ class QuestionView extends StatelessWidget {
                                           Colors.black.withOpacity(0.6),
                                       strokeColor: viewModel.whiteboardColor,
                                       isErasing: viewModel.whiteboardDuster,
-                                      controller:
-                                          viewModel.whiteBoardController,
                                     );
                                   }),
                                 ),
@@ -232,7 +306,7 @@ class QuestionView extends StatelessWidget {
     );
   }
 
-  Container buildQuestionContainer(
+  Widget buildQuestionContainer(
       QuestionModel questionModel, BuildContext context) {
     return Container(
       child: questionModel.is_image!
@@ -260,13 +334,53 @@ class QuestionView extends StatelessWidget {
                 },
               ),
             )
-          : Text(
-              questionModel.value!,
-              style: TextStyle(
-                fontFamily: context.fontFamily600,
-                fontSize: 28,
-              ),
+          : buildLatexContainer(questionModel, context),
+    );
+  }
+
+  String formatTeX(String input) {
+    // LaTeX komutlarını ve süslü parantezlerini bulur ve \(...\) içine alır.
+    String formatted =
+        input.replaceAllMapped(RegExp(r'\\[a-zA-Z]+\{[^}]*\}'), (Match m) {
+      return r'\(' + m.group(0)! + r'\)';
+    });
+
+    // \text{...} yapılarını kaldırırken içindeki metni korur.
+    formatted = formatted.replaceAllMapped(
+        RegExp(r'\\text\{([^}]*)\}'), (Match m) => m.group(1)!);
+
+    return formatted;
+  }
+
+  Widget buildLatexContainer(
+      QuestionModel questionModel, BuildContext context) {
+    return Center(
+      child: TeXView(
+        renderingEngine: TeXViewRenderingEngine.katex(),
+        child: TeXViewColumn(
+          children: [
+            TeXViewDocument(
+              r"" + (questionModel.value!),
+              style: TeXViewStyle(
+                  textAlign: TeXViewTextAlign.center,
+                  fontStyle: TeXViewFontStyle(
+                    fontWeight: TeXViewFontWeight.w500,
+                    fontSize: 24,
+                  )),
             ),
+            // TeXViewDocument(
+            //     r"Eğer 5 yıl sonra Ahmet'in yaşı Ali'nin yaşının 1.5 katı olacaksa,"),
+            // TeXViewDocument(r"Ahmet'in şu anki yaşı kaçtır?")
+          ],
+        ),
+      ),
+    );
+    return Text(
+      questionModel.value!,
+      style: TextStyle(
+        fontFamily: context.fontFamily600,
+        fontSize: 28,
+      ),
     );
   }
 
@@ -291,44 +405,160 @@ class QuestionView extends StatelessWidget {
   }
 
   Padding buildStatusContainer(
-      BuildContext context, QuestionViewModel viewModel) {
+      BuildContext context, QuestionViewModel viewModel, Sections section) {
     return Padding(
-      padding: const EdgeInsets.all(12.0),
+      padding: EdgeInsets.all(section.trialId != null ? 0 : 12.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: SizedBox(
-                  width: context.width * 0.8,
-                  child: LinearPercentIndicator(
-                    lineHeight: 25.0,
-                    padding: EdgeInsets.zero,
-                    animation: true,
-                    animationDuration: 300,
-                    barRadius: Radius.circular(15),
-                    percent: viewModel.questionModel.solvedTotal! /
-                        viewModel.questionModel.questionTotal!,
-                    backgroundColor: context.appColorGray.withOpacity(0.5),
-                    progressColor: context.appColor,
+          if (section.trialId == null)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: SizedBox(
+                    width: context.width * 0.8,
+                    child: LinearPercentIndicator(
+                      lineHeight: 25.0,
+                      padding: EdgeInsets.zero,
+                      animation: true,
+                      animationDuration: 300,
+                      barRadius: Radius.circular(15),
+                      percent: viewModel.questionModel.solvedTotal! /
+                          viewModel.questionModel.questionTotal!,
+                      backgroundColor: context.appColorGray.withOpacity(0.5),
+                      progressColor: context.appColor,
+                    ),
                   ),
                 ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  viewModel.resetTest();
-                  viewModel.homePage();
-                },
-                child: const Icon(
-                  Icons.close_sharp,
-                  size: 32,
+                buildClosePage(viewModel),
+              ],
+            ),
+          if (section.trialId != null)
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                if (viewModel.section.trialResult == null)
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      bottom: 10.0,
+                      left: 12,
+                      right: 12,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CountdownTimerWidget(
+                          minutes: viewModel.trialQuestionTime,
+                          onDecrementTime: () {},
+                          onTimeComplete: () async {
+                            await viewModel.finishTrial();
+                            print('Süre bitti!');
+                            // Burada süre bittiğinde yapılacak işlemleri ekleyin
+                          },
+                        ),
+                        // buildClosePage(viewModel),
+                      ],
+                    ),
+                  ),
+                // Observer(builder: (_) {
+                //   return Text(
+                //       "data: " + viewModel.trialQuestionCount.toString());
+                // }),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Container(
+                    height: 50,
+                    width: context.width * 1,
+                    child: ListView.builder(
+                      itemCount: viewModel.trialQuestionCount,
+                      scrollDirection: Axis.horizontal,
+                      controller: viewModel.scrollTrialController,
+                      padding: EdgeInsets.zero,
+                      itemBuilder: (context, index) {
+                        int sort = index + 1;
+                        return Stack(
+                          children: [
+                            GestureDetector(
+                              onTap: () async {
+                                await viewModel.changeQuestionSort(sort);
+                              },
+                              child: Container(
+                                width: 55,
+                                height: 55,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    width: 1,
+                                    color: viewModel
+                                            .trialQuestionSituations.isEmpty
+                                        ? viewModel.solvedQuestions
+                                                .contains(sort)
+                                            ? context.appColor600
+                                                .withOpacity(0.8)
+                                            : viewModel.passQuestions
+                                                    .contains(sort)
+                                                ? context.appBorderColor400
+                                                : context.appBorderColor400
+                                        : buildTrialQuesitonSituationColor(
+                                            viewModel, index, context),
+                                  ),
+                                  color: viewModel
+                                          .trialQuestionSituations.isEmpty
+                                      ? viewModel.solvedQuestions.contains(sort)
+                                          ? context.appColor
+                                          : viewModel.passQuestions
+                                                  .contains(sort)
+                                              ? Colors.white
+                                              : Colors.white
+                                      : buildTrialQuesitonSituationColor(
+                                          viewModel, index, context),
+                                  // borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    (sort).toString(),
+                                    style: TextStyle(
+                                      fontFamily: context.fontFamily600,
+                                      color: viewModel
+                                              .trialQuestionSituations.isEmpty
+                                          ? viewModel.solvedQuestions
+                                                  .contains(sort)
+                                              ? Colors.white
+                                              : context.appColor100
+                                          : Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            if (viewModel.selectedQuestionSort == sort)
+                              Positioned(
+                                bottom: 8,
+                                left: 15,
+                                right: 15,
+                                child: Container(
+                                  height: 3,
+                                  decoration: BoxDecoration(
+                                    color: viewModel
+                                            .trialQuestionSituations.isEmpty
+                                        ? viewModel.solvedQuestions
+                                                .contains(sort)
+                                            ? Colors.white
+                                            : context.appColor
+                                        : Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                              )
+                          ],
+                        );
+                      },
+                    ),
+                  ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
           if (viewModel.questionModel.is_repeat == true)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
@@ -358,21 +588,46 @@ class QuestionView extends StatelessWidget {
                 ],
               ),
             ),
-          Container(
-            padding: EdgeInsets.only(top: 15),
-            width: context.width,
-            alignment: Alignment.center,
-            child: Text(
-              findQuestionTitleByType(
-                viewModel.questionModel.type!,
-              ),
-              style: TextStyle(
-                fontSize: 20,
-                fontFamily: context.fontFamily600,
+          if (section.trialId == null)
+            Container(
+              padding: EdgeInsets.only(top: 20),
+              width: context.width,
+              alignment: Alignment.center,
+              child: Text(
+                findQuestionTitleByType(
+                  viewModel.questionModel.type!,
+                ),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontFamily: context.fontFamily500,
+                ),
               ),
             ),
-          ),
         ],
+      ),
+    );
+  }
+
+  Color buildTrialQuesitonSituationColor(
+      QuestionViewModel viewModel, int index, BuildContext context) {
+    print("index: " + index.toString());
+
+    return viewModel.trialQuestionSituations[index] == true
+        ? context.appButtonGreen100
+        : viewModel.trialQuestionSituations[index] == false
+            ? context.appColorRed
+            : context.appColorYellow300;
+  }
+
+  GestureDetector buildClosePage(QuestionViewModel viewModel) {
+    return GestureDetector(
+      onTap: () {
+        viewModel.resetTest();
+        viewModel.homePage();
+      },
+      child: const Icon(
+        Icons.close_sharp,
+        size: 28,
       ),
     );
   }

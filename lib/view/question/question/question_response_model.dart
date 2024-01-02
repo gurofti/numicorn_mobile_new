@@ -39,7 +39,7 @@ class QuestionModel {
   int? questionTotal;
   int? solvedTotal;
   int? againLevel;
-  bool? answer_status;
+  String? answer_detail;
   String? answer_path;
   bool? openedAnswer;
   int? notBeWrongQuestion;
@@ -65,7 +65,7 @@ class QuestionModel {
     this.items,
     this.questionTotal,
     this.solvedTotal,
-    this.answer_status,
+    this.answer_detail,
     this.answer_path,
     this.userDoping,
     this.is_repeat,
