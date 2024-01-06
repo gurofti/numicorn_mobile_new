@@ -45,7 +45,7 @@ class QuestionAnswerDetailView extends StatelessWidget {
                       ),
                       QuestionView(section).buildQuestionContainer(
                         QuestionModel(
-                          path: section.question!.answer_path!,
+                          path: section.question?.answer_path!,
                           is_image: true,
                         ),
                         context,

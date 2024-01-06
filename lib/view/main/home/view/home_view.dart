@@ -11,6 +11,7 @@ import 'package:numicorn_mobile/view/_product/_widgets/button/fancy_button.dart'
 import 'package:numicorn_mobile/view/_product/_widgets/container/app/app_container.dart';
 import 'package:numicorn_mobile/view/_product/_widgets/container/potion/potion_container.dart';
 import 'package:numicorn_mobile/view/_product/_widgets/star/start_widget.dart';
+import 'package:numicorn_mobile/view/_product/_widgets/unit/unit_card.dart';
 import 'package:numicorn_mobile/view/main/home/model/home_units_model.dart';
 import 'package:numicorn_mobile/view/question/view/transition/transition_model.dart';
 import 'package:numicorn_mobile/view/main/home/model/account_model.dart';
@@ -124,47 +125,9 @@ class HomeView extends StatelessWidget {
                   children: [Star(), Star()],
                 ),
               ),
-              Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 15,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          (viewModel.units[index].title.toString()),
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'PoppinsBold',
-                            fontSize: 22,
-                          ),
-                        ),
-                        Text(
-                          (viewModel.units[index].description.toString()),
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        )
-                      ],
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 3, color: Colors.white),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
-                      child: Icon(
-                        Icons.menu_book,
-                        color: Colors.white,
-                        size: 28,
-                      ),
-                    )
-                  ],
-                ),
+              UnitCard(
+                title: viewModel.units[index].title.toString(),
+                description: viewModel.units[index].description.toString(),
               ),
             ],
           ),
@@ -189,16 +152,6 @@ class HomeView extends StatelessWidget {
             ],
           ),
         ),
-        // ListView.builder(
-        //   physics: const NeverScrollableScrollPhysics(),
-        //   itemCount: viewModel.units[index].sections?.length ?? 0,
-        //   scrollDirection: Axis.vertical,
-        //   shrinkWrap: true,
-        //   itemBuilder: (BuildContext context, int sectionImdex) {
-        //     return buildPotionContainer(context, viewModel,
-        //         viewModel.units[index].sections![sectionImdex]);
-        //   },
-        // ),
       ],
     );
   }

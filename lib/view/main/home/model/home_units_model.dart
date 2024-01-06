@@ -120,6 +120,7 @@ class Sections {
   int? lastSecond;
   bool? again;
   int? trialId;
+  int? wrongSectionId;
   bool? trialResult;
   bool? trialAgain;
 
@@ -147,6 +148,7 @@ class Sections {
     this.lastSecond,
     this.again,
     this.trialId,
+    this.wrongSectionId,
     this.trialResult,
     this.trialAgain,
   });

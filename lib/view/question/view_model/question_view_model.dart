@@ -11,9 +11,11 @@ import 'package:numicorn_mobile/view/main/super/model/trial_finish_request_model
 import 'package:numicorn_mobile/view/main/super/model/trial_finish_response_model.dart';
 import 'package:numicorn_mobile/view/main/super/model/trial_question_situations_request_model.dart';
 import 'package:numicorn_mobile/view/main/super/model/trial_questions_request_model.dart';
+import 'package:numicorn_mobile/view/main/super/model/super_wrong_questions_request_model.dart';
 import 'package:numicorn_mobile/view/main/super/service/ISuperService.dart';
 import 'package:numicorn_mobile/view/main/super/service/super_service.dart';
 import 'package:numicorn_mobile/view/question/answer/question_answer_request.model.dart';
+import 'package:numicorn_mobile/view/question/favorite/question_favorite_request.model.dart';
 import 'package:numicorn_mobile/view/question/model/trial_question_answer.dart';
 import 'package:numicorn_mobile/view/question/question/question_request.model.dart';
 import 'package:numicorn_mobile/view/question/question/question_response_model.dart';
@@ -74,6 +76,9 @@ abstract class _QuestionViewModelBase extends BaseViewModel with Store {
 
   @observable
   QuestionModel questionModel = QuestionModel(path: '');
+
+  @observable
+  bool questionFavorite = false;
 
   @observable
   List<Answers> answers = [];
@@ -275,27 +280,45 @@ abstract class _QuestionViewModelBase extends BaseViewModel with Store {
   }
 
   @action
-  Future<void> fetchTrialQuestions(int trial_id, bool? trial_again) async {
+  Future<void> pageWrongs() async {
+    await navigation.navigateToPageClear(
+      path: NavigationConstants.SUPER_WRONGS,
+    );
+  }
+
+  @action
+  Future<void> fetchTrialQuestions(int item_id, bool? trial_again) async {
     if (trial_again == true) {
       print("try again");
-      await superService.againTrial(RequestIdModel(id: trial_id));
+      await superService.againTrial(RequestIdModel(id: item_id));
     }
 
-    final response = await superService.fetchTrialQuestions(
-      TrialQuestionsRequestModel(
-        page: selectedQuestionSort,
-        limit: 1,
-        trial_id: trial_id,
-      ),
-    );
+    final response = section.wrongSectionId != null
+        ? await superService.fetchWrongQuestions(
+            SuperWrongQuestionsRequestModel(
+              page: selectedQuestionSort,
+              limit: 1,
+              section_id: item_id,
+            ),
+          )
+        : await superService.fetchTrialQuestions(
+            TrialQuestionsRequestModel(
+              page: selectedQuestionSort,
+              limit: 1,
+              trial_id: item_id,
+            ),
+          );
 
     if (response != null) {
       removeAnswer();
       print("response.items!: " + response.items!.question!.toString());
       trialQuestionId = response.items!.id!;
       questionModel = response.items!.question!;
+      questionFavorite = questionModel.favorite!;
       trialQuestionCount = response.totalItems;
-      trialQuestionTime = response.items!.time!;
+      if (section.trialId != null) {
+        trialQuestionTime = response.items!.time!;
+      }
 
       try {
         TrialQuestionAnswer trialQuestionAnswer = trialQuestionAnswers
@@ -314,7 +337,7 @@ abstract class _QuestionViewModelBase extends BaseViewModel with Store {
         }
       } catch (e) {}
 
-      if (section.trialResult == true) {
+      if (section.trialResult == true || section.wrongSectionId != null) {
         if (questionModel.type == 1) {
           answerText = questionModel.answer!.toString();
         } else if (questionModel.type == 2) {
@@ -353,6 +376,7 @@ abstract class _QuestionViewModelBase extends BaseViewModel with Store {
       if (response.statusCode == 200) {
         removeAnswer();
         questionModel = await response.data.data;
+        questionFavorite = questionModel.favorite!;
         if (questionModel.type == 3) {
           splitItemsToArrays(questionModel.items ?? []);
         } else if (questionModel.type == 4) {
@@ -653,19 +677,20 @@ abstract class _QuestionViewModelBase extends BaseViewModel with Store {
     }
 
     selectedQuestionSort = sort;
-    await fetchTrialQuestions(section.trialId!, null);
+    await fetchTrialQuestions(section.trialId ?? section.wrongSectionId!, null);
   }
 
   @action
   Future<bool> handleAnswer() async {
-    if (section.trialResult == true) {
+    if (section.trialResult == true || section.wrongSectionId != null) {
       print("selectedQuestionSort: " + selectedQuestionSort.toString());
       if (selectedQuestionSort < trialQuestionCount) {
         selectedQuestionSort += 1;
       } else {
         selectedQuestionSort = 1;
       }
-      await fetchTrialQuestions(section.trialId!, null);
+      await fetchTrialQuestions(
+          section.trialId ?? section.wrongSectionId!, null);
       return true;
     }
 
@@ -688,7 +713,8 @@ abstract class _QuestionViewModelBase extends BaseViewModel with Store {
       print("level: " + level.toString());
       // passQuestions
       selectedQuestionSort = level;
-      await fetchTrialQuestions(section.trialId!, null);
+      await fetchTrialQuestions(
+          section.trialId ?? section.wrongSectionId!, null);
       return true;
     }
     if (response.statusCode == 200) {
@@ -849,5 +875,17 @@ abstract class _QuestionViewModelBase extends BaseViewModel with Store {
 
     errorLoading = false;
     return true;
+  }
+
+  @action
+  Future<void> favoriteAction() async {
+    print("section id: ${section.id}");
+    await questionService.questionFavorite(
+      QuestionFavoriteRequestModel(
+        question_id: questionModel.id,
+        section_id: section.id,
+      ),
+    );
+    questionFavorite = !questionFavorite;
   }
 }

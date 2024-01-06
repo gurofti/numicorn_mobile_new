@@ -54,6 +54,7 @@ QuestionModel _$QuestionModelFromJson(Map<String, dynamic> json) =>
       is_repeat: json['is_repeat'] as bool?,
       againLevel: json['againLevel'] as int?,
       newDoping: json['newDoping'] as bool?,
+      favorite: json['favorite'] as bool?,
       openedAnswer: json['openedAnswer'] as bool?,
       notBeWrongQuestion: json['notBeWrongQuestion'] as int?,
       totalQuestion: json['totalQuestion'] as int?,
@@ -88,6 +89,7 @@ Map<String, dynamic> _$QuestionModelToJson(QuestionModel instance) =>
       'userDoping': instance.userDoping,
       'is_repeat': instance.is_repeat,
       'newDoping': instance.newDoping,
+      'favorite': instance.favorite,
       'totalQuestion': instance.totalQuestion,
     };
 

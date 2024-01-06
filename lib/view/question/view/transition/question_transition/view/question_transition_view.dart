@@ -87,7 +87,7 @@ class QuestionTransitionView extends StatelessWidget {
                             child: SizedBox(
                               width: context.width - 56,
                               child: Text(
-                                transitionModel!.buttonText ?? "DEVAM ET",
+                                transitionModel?.buttonText ?? "DEVAM ET",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: context.appColor,

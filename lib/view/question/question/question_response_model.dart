@@ -46,6 +46,7 @@ class QuestionModel {
   bool? userDoping;
   bool? is_repeat;
   bool? newDoping;
+  bool? favorite;
   int? totalQuestion;
 
   QuestionModel({
@@ -71,6 +72,7 @@ class QuestionModel {
     this.is_repeat,
     this.againLevel,
     this.newDoping,
+    this.favorite,
     this.openedAnswer,
     this.notBeWrongQuestion,
     this.totalQuestion,

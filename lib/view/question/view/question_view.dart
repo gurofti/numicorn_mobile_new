@@ -45,10 +45,15 @@ class QuestionView extends StatelessWidget {
         model.setContext(context);
         model.init();
         model.section = section;
-        if (section.trialId != null) {
-          print("# trialId: " + section.trialId.toString());
-          model.fetchTrialQuestionSituations(section.trialId as int);
-          model.fetchTrialQuestions(section.trialId as int, section.trialAgain);
+        if (section.trialId != null || section.wrongSectionId != null) {
+          print("# itemId: " +
+              ((section.trialId ?? section.wrongSectionId)).toString());
+          if (section.trialId != null) {
+            model.fetchTrialQuestionSituations(section.trialId as int);
+          }
+          model.fetchTrialQuestions(
+              (section.trialId ?? section.wrongSectionId) as int,
+              section.trialAgain);
         } else {
           model.fetchQuestion(
             this.section.id as int,
@@ -97,141 +102,11 @@ class QuestionView extends StatelessWidget {
                                 if (viewModel.questionModel.type == 1 ||
                                     viewModel.questionModel.type == 2 ||
                                     viewModel.questionModel.type == 4)
-                                  // Center(
-                                  //   child: Column(
-                                  //     children: [
-                                  //       // TeXView(
-                                  //       //   renderingEngine: TeXViewRenderingEngine.katex(),
-                                  //       //   child: TeXViewColumn(children: [
-                                  //       //     TeXViewDocument(
-                                  //       //         r"Ahmet'in yaşı şu anda Ali'nin yaşının iki katıdır."),
-                                  //       //     TeXViewDocument(
-                                  //       //         r"Eğer 5 yıl sonra Ahmet'in yaşı Ali'nin yaşının 1.5 katı olacaksa,"),
-                                  //       //     TeXViewDocument(
-                                  //       //         r"Ahmet'in şu anki yaşı kaçtır?")
-                                  //       //   ]),
-                                  //       // ),
-                                  //       // TeXView(
-                                  //       //   renderingEngine:
-                                  //       //       TeXViewRenderingEngine.katex(),
-                                  //       //   child: TeXViewDocument(
-                                  //       //     r"""
-                                  //       //   Ahmet'in yaşı şu anda Ali'nin yaşının iki katıdır. \\
-                                  //       //    Eğer 5 yıl sonra Ahmet'in yaşı Ali'nin yaşının 1.5 katı olacaksa, \\
-                                  //       //    Ahmet'in şu anki yaşı kaçtır?
-
-                                  //       //     """,
-                                  //       //     style: TeXViewStyle(
-                                  //       //       textAlign:
-                                  //       //           TeXViewTextAlign.center,
-                                  //       //       sizeUnit: TeXViewSizeUnit.pixels,
-                                  //       //       fontStyle: TeXViewFontStyle(
-                                  //       //         fontSize: 15,
-                                  //       //       ),
-                                  //       //     ),
-                                  //       //   ),
-                                  //       // ),
-                                  //       // SizedBox(height: 50),
-                                  //       latexExample(context),
-                                  //       // latexExample(context),
-                                  //     ],
-                                  //   ),
-                                  // ),
-
                                   buildQuestionContainer(
                                       viewModel.questionModel, context),
-                                Column(
-                                  children: [
-                                    // Question Answer Of Keyword
-                                    if (viewModel.questionModel.type == 1)
-                                      buildContentContainer(context, viewModel),
-                                    if (viewModel.questionModel.type != 3)
-                                      Container(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 15),
-                                        width: context.width,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            if (viewModel.questionModel
-                                                        .answer_detail !=
-                                                    null &&
-                                                section.trialId == null)
-                                              GestureDetector(
-                                                onTap: () async {
-                                                  await viewModel.answerPage();
-                                                  // Navigator.push(
-                                                  //   context,
-                                                  //   MaterialPageRoute(
-                                                  //     builder: (context) =>
-                                                  //         QuestionAnswerView(), //  FinishLessonPage(), // TreasurePage(), // DailySeriesPage(), // QuestionAnswerPage(),
-                                                  //   ),
-                                                  // );
-                                                },
-                                                child: Container(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          bottom: 15),
-                                                  child: Icon(
-                                                    Icons.tungsten_rounded,
-                                                    size: 28,
-                                                    color: context.appColor,
-                                                  ),
-                                                ),
-                                              ),
-                                            // Padding(
-                                            //   padding:
-                                            //       const EdgeInsets.symmetric(
-                                            //     vertical: 12.0,
-                                            //   ),
-                                            //   child: GestureDetector(
-                                            //     onTap: () {
-                                            //       viewModel.whiteBoard =
-                                            //           !viewModel.whiteBoard;
-                                            //     },
-                                            //     child: Icon(
-                                            //       Icons.task_alt,
-                                            //       size: 28,
-                                            //       color: viewModel.whiteBoard
-                                            //           ? context.appColorPink500
-                                            //           : context.appColor,
-                                            //     ),
-                                            //   ),
-                                            // ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                viewModel.whiteBoard =
-                                                    !viewModel.whiteBoard;
-                                              },
-                                              child: Icon(
-                                                Icons.edit,
-                                                size: 28,
-                                                color: viewModel.whiteBoard
-                                                    ? context.appColorPink500
-                                                    : context.appColor,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    Container(
-                                      padding: EdgeInsets.only(top: 25),
-                                      child: Stack(
-                                        children: [
-                                          buildQuestionAction(
-                                            context,
-                                            viewModel,
-                                            viewModel.questionModel.type!,
-                                            viewModel.handleAnswer,
-                                            viewModel.errorContinue,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
+                                buildQuestionActionContainer(
+                                  viewModel,
+                                  context,
                                 ),
                               ],
                             ),
@@ -303,6 +178,88 @@ class QuestionView extends StatelessWidget {
               )
             : TransitionPage();
       }),
+    );
+  }
+
+  Column buildQuestionActionContainer(
+      QuestionViewModel viewModel, BuildContext context) {
+    return Column(
+      children: [
+        // Question Answer Of Keyword
+        if (viewModel.questionModel.type == 1)
+          buildContentContainer(context, viewModel),
+        if (viewModel.questionModel.type != 3)
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            width: context.width,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                if (viewModel.questionModel.answer_detail != null &&
+                    section.trialId == null)
+                  GestureDetector(
+                    onTap: () async {
+                      await viewModel.answerPage();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: 15,
+                      ),
+                      child: Icon(
+                        Icons.tungsten_rounded,
+                        size: 28,
+                        color: context.appColor,
+                      ),
+                    ),
+                  ),
+                GestureDetector(
+                  onTap: () async {
+                    await viewModel.favoriteAction();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      bottom: 15,
+                    ),
+                    child: Icon(
+                      Icons.favorite,
+                      size: 28,
+                      color: viewModel.questionFavorite!
+                          ? context.appColorPink500
+                          : context.appColor,
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    viewModel.whiteBoard = !viewModel.whiteBoard;
+                  },
+                  child: Icon(
+                    Icons.edit,
+                    size: 28,
+                    color: viewModel.whiteBoard
+                        ? context.appColorPink500
+                        : context.appColor,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        Container(
+          padding: EdgeInsets.only(top: 25),
+          child: Stack(
+            children: [
+              buildQuestionAction(
+                context,
+                viewModel,
+                viewModel.questionModel.type!,
+                viewModel.handleAnswer,
+                viewModel.errorContinue,
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -407,11 +364,14 @@ class QuestionView extends StatelessWidget {
   Padding buildStatusContainer(
       BuildContext context, QuestionViewModel viewModel, Sections section) {
     return Padding(
-      padding: EdgeInsets.all(section.trialId != null ? 0 : 12.0),
+      padding: EdgeInsets.all(
+          (section.trialId != null || section.wrongSectionId != null)
+              ? 0
+              : 12.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          if (section.trialId == null)
+          if (section.trialId == null && section.wrongSectionId == null)
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -435,11 +395,12 @@ class QuestionView extends StatelessWidget {
                 buildClosePage(viewModel),
               ],
             ),
-          if (section.trialId != null)
+          if (section.trialId != null || section.wrongSectionId != null)
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if (viewModel.section.trialResult == null)
+                if (viewModel.section.trialResult == null &&
+                    section.wrongSectionId == null)
                   Padding(
                     padding: const EdgeInsets.only(
                       bottom: 10.0,
@@ -588,7 +549,7 @@ class QuestionView extends StatelessWidget {
                 ],
               ),
             ),
-          if (section.trialId == null)
+          if (section.trialId == null && section.wrongSectionId == null)
             Container(
               padding: EdgeInsets.only(top: 20),
               width: context.width,

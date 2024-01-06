@@ -12,6 +12,7 @@ class NavigationConstants {
   static const NOTIFICATION_SETTING_VIEW = '/account/notification/setting';
   static const ACCOUNT_PASSWORD_VIEW = '/account/password';
   static const LECTURE = '/lecture';
+  static const SUPER = '/super';
   static const SUPER_WRONGS = '/super-wrongs';
   static const SUPER_STATISTICS = '/super-statistics';
   static const SUPER_TRIALS = '/super-trials';

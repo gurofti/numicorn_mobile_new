@@ -82,7 +82,7 @@ class SuperTrialsView extends StatelessWidget {
                         ),
 
                         // Text("leng:${viewModel.trialItems.length}"),
-                        true
+                        viewModel.trialItems.length > 0
                             ? Column(
                                 children: [
                                   Text(

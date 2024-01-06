@@ -60,6 +60,8 @@ class QuestionButton extends StatelessWidget {
                       onPressed: () async {
                         if (viewModel.section.trialResult == true) {
                           return await viewModel.pageTrials();
+                        } else if (viewModel.section.wrongSectionId != null) {
+                          return await viewModel.pageWrongs();
                         }
                         showDialog(
                           context: context,

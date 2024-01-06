@@ -13,4 +13,8 @@ abstract class BaseViewModel {
 
   void setContext(BuildContext buildContext);
   void init();
+
+  Future<void> redirectToPage(String path, {dynamic data}) async {
+    await navigation.navigateToPage(path: path, data: data);
+  }
 }

@@ -26,8 +26,11 @@ abstract class _QuestionTransitionViewModelBase extends BaseViewModel
 
   @action
   Future<void> transitionPage() async {
-    if (transitionModel!.actions[transitionModel!.index + 1].page ==
-        NavigationConstants.QUESTION) {
+    print("object ${transitionModel!.actions[transitionModel!.index]}");
+
+    if (transitionModel!.actions?.length == (transitionModel!.index) &&
+        transitionModel!.actions[transitionModel!.index + 1].page ==
+            NavigationConstants.QUESTION) {
       print("question page");
       await navigation.navigateToPageClear(
         path: NavigationConstants.QUESTION,

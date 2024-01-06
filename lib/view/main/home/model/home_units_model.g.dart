@@ -82,6 +82,7 @@ Sections _$SectionsFromJson(Map<String, dynamic> json) => Sections(
       lastSecond: json['lastSecond'] as int?,
       again: json['again'] as bool?,
       trialId: json['trialId'] as int?,
+      wrongSectionId: json['wrongSectionId'] as int?,
       trialResult: json['trialResult'] as bool?,
       trialAgain: json['trialAgain'] as bool?,
     );
@@ -110,6 +111,7 @@ Map<String, dynamic> _$SectionsToJson(Sections instance) => <String, dynamic>{
       'lastSecond': instance.lastSecond,
       'again': instance.again,
       'trialId': instance.trialId,
+      'wrongSectionId': instance.wrongSectionId,
       'trialResult': instance.trialResult,
       'trialAgain': instance.trialAgain,
     };

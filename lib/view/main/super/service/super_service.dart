@@ -10,6 +10,8 @@ import 'package:numicorn_mobile/view/main/super/model/trial_question_situations_
 import 'package:numicorn_mobile/view/main/super/model/trial_questions_request_model.dart';
 import 'package:numicorn_mobile/view/main/super/model/trial_questions_response_model.dart';
 import 'package:numicorn_mobile/view/main/super/model/trial_sections_model.dart';
+import 'package:numicorn_mobile/view/main/super/model/super_wrong_questions_request_model.dart';
+import 'package:numicorn_mobile/view/main/super/model/super_wrongs_model.dart';
 import 'package:numicorn_mobile/view/main/super/model/trials_request_model.dart';
 import 'package:numicorn_mobile/view/main/super/model/trials_response_model.dart';
 import '../../../../core/constants/enums/http_request_enum.dart';
@@ -162,5 +164,48 @@ class SuperService extends ISuperService with ServiceHelper {
       print("hataa");
       return null;
     }
+  }
+
+  @override
+  Future fetchWrongs() async {
+    final response =
+        await CoreDio().send<WrongSectionsResponse, WrongSectionsResponse>(
+      NetworkRoutes.SUPER_WRONGS_SECTION.rawValue,
+      parseModel: WrongSectionsResponse(),
+      type: HttpTypes.POST,
+    );
+
+    if (response.statusCode == 200) {
+      return response.data.data;
+    } else {
+      print("hataa");
+      return null;
+    }
+  }
+
+  @override
+  Future fetchWrongQuestions(SuperWrongQuestionsRequestModel data) async {
+    // TODO: implement fetchWrongQuestions SUPER_WRONG_QUESTIONS
+
+    final response = await CoreDio()
+        .send<TrialQuestionsResponseModel, TrialQuestionsResponseModel>(
+      NetworkRoutes.SUPER_WRONG_QUESTIONS.rawValue,
+      data: data,
+      parseModel: TrialQuestionsResponseModel(),
+      type: HttpTypes.POST,
+    );
+
+    if (response.statusCode == 200) {
+      return response.data.data;
+    } else {
+      print("hataa");
+      return null;
+    }
+  }
+
+  @override
+  Future fetchFavorites() {
+    // TODO: implement fetchFavorites
+    throw UnimplementedError();
   }
 }

@@ -171,9 +171,11 @@ class SettingView extends StatelessWidget {
     );
   }
 
-  Container settingCard(BuildContext context, items) {
+  Container settingCard(BuildContext context, items,
+      {color = Colors.transparent}) {
     return Container(
       decoration: BoxDecoration(
+        color: color,
         border: Border(
           top: borderSide(context),
           left: borderSide(context),

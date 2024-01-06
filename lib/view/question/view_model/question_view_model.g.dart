@@ -153,6 +153,22 @@ mixin _$QuestionViewModel on _QuestionViewModelBase, Store {
     });
   }
 
+  late final _$questionFavoriteAtom =
+      Atom(name: '_QuestionViewModelBase.questionFavorite', context: context);
+
+  @override
+  bool get questionFavorite {
+    _$questionFavoriteAtom.reportRead();
+    return super.questionFavorite;
+  }
+
+  @override
+  set questionFavorite(bool value) {
+    _$questionFavoriteAtom.reportWrite(value, super.questionFavorite, () {
+      super.questionFavorite = value;
+    });
+  }
+
   late final _$answersAtom =
       Atom(name: '_QuestionViewModelBase.answers', context: context);
 
@@ -486,14 +502,22 @@ mixin _$QuestionViewModel on _QuestionViewModelBase, Store {
     return _$pageTrialsAsyncAction.run(() => super.pageTrials());
   }
 
+  late final _$pageWrongsAsyncAction =
+      AsyncAction('_QuestionViewModelBase.pageWrongs', context: context);
+
+  @override
+  Future<void> pageWrongs() {
+    return _$pageWrongsAsyncAction.run(() => super.pageWrongs());
+  }
+
   late final _$fetchTrialQuestionsAsyncAction = AsyncAction(
       '_QuestionViewModelBase.fetchTrialQuestions',
       context: context);
 
   @override
-  Future<void> fetchTrialQuestions(int trial_id, bool? trial_again) {
+  Future<void> fetchTrialQuestions(int item_id, bool? trial_again) {
     return _$fetchTrialQuestionsAsyncAction
-        .run(() => super.fetchTrialQuestions(trial_id, trial_again));
+        .run(() => super.fetchTrialQuestions(item_id, trial_again));
   }
 
   late final _$fetchQuestionAsyncAction =
@@ -561,6 +585,14 @@ mixin _$QuestionViewModel on _QuestionViewModelBase, Store {
   @override
   Future<bool> questionReport() {
     return _$questionReportAsyncAction.run(() => super.questionReport());
+  }
+
+  late final _$favoriteActionAsyncAction =
+      AsyncAction('_QuestionViewModelBase.favoriteAction', context: context);
+
+  @override
+  Future<void> favoriteAction() {
+    return _$favoriteActionAsyncAction.run(() => super.favoriteAction());
   }
 
   late final _$_QuestionViewModelBaseActionController =
@@ -743,6 +775,7 @@ timer: ${timer},
 secondsElapsed: ${secondsElapsed},
 whiteboardDuster: ${whiteboardDuster},
 questionModel: ${questionModel},
+questionFavorite: ${questionFavorite},
 answers: ${answers},
 answerText: ${answerText},
 answerTrueOrFalse: ${answerTrueOrFalse},

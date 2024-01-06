@@ -48,7 +48,6 @@ class NavigationRoute {
   Route<dynamic> generateRoute(RouteSettings args) {
     final token = localeManager.getStringValue(PreferencesKeys.TOKEN);
     print("token " + token);
-
     print("Route: " + args.name!);
     // return normalNavigate(const MyHomePage());
 
@@ -63,6 +62,14 @@ class NavigationRoute {
           ));
         }
         return normalNavigate(const AuthView());
+
+      case NavigationConstants.SUPER:
+        return normalNavigate(
+          Navigation(
+            initialIndex: 1,
+            finishPage: FinishPage(page: '', y: 0),
+          ),
+        );
 
       case NavigationConstants.LOGIN:
         return normalNavigate(const LoginView());
